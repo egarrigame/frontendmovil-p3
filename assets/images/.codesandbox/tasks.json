@@ -1,0 +1,15 @@
+{
+  "setupTasks": [
+    "npm install"
+  ],
+  "tasks": {
+    "dev-server": {
+      "name": "Dev Server",
+      "command": "npm run start",
+      "preview": {
+        "port": 8081
+      },
+      "runAtStart": true
+    }
+  }
+}
