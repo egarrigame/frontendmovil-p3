@@ -47,7 +47,7 @@ export default function RootLayout() {
         }}
       />
 
-      {/* 🔍 Nueva pantalla para ver la foto en zoom */}
+      {/*pantalla para ver la foto en zoom */}
       <Stack.Screen
         name="foto"
         options={{
@@ -64,3 +64,5 @@ export default function RootLayout() {
     </Stack>
   );
 }
+
+

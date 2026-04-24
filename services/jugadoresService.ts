@@ -1,8 +1,7 @@
-// services/retosService.ts
-import { get, ref } from 'firebase/database';
 import { db } from '../firebaseConfig';
+import { ref, get } from 'firebase/database';
 
-export type Player = {
+export type Jugador = {
   id: string;
   nombre: string;
   apellidos: string;
@@ -13,20 +12,17 @@ export type Player = {
   videoUrl: string;
 };
 
-export const getRetosOnce = async (): Promise<Player[]> => {
-  console.log('➡️ Llamando a Firebase ruta "jugadores/jugadores" ...');
-
+export const getJugadoresOnce = async (): Promise<Jugador[]> => {
   const snapshot = await get(ref(db, 'jugadores/jugadores'));
 
   if (!snapshot.exists()) {
     return [];
   }
 
-  const data = snapshot.val(); // { "7eCHkd1oPgxXvmaI1XB9": {...} }
+  const data = snapshot.val();
 
-  const lista: Player[] = Object.keys(data).map((key) => {
+  return Object.keys(data).map((key) => {
     const item = data[key];
-
     return {
       id: key,
       nombre: item.nombre ?? '',
@@ -35,11 +31,7 @@ export const getRetosOnce = async (): Promise<Player[]> => {
       altura: item.altura ?? 0,
       posicion: item.posicion ?? '',
       photoUrl: item.photoUrl ?? '',
-      // por si en algún momento lo escribiste como "videoUrlL" o similar:
-      videoUrl: item.videoUrl ?? item.videoUrlL ?? '',
+      videoUrl: item.videoUrl ?? '',
     };
   });
-
-  console.log('✅ lista jugadores:', lista);
-  return lista;
 };

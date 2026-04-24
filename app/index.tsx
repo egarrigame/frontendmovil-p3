@@ -1,32 +1,25 @@
 import React, { useEffect, useState } from 'react';
-import {
-  View,
-  Text,
-  FlatList,
-  TouchableOpacity,
-  ActivityIndicator,
-  Image,
-} from 'react-native';
+import { View, Text, FlatList, TouchableOpacity, ActivityIndicator, Image } from 'react-native';
 import { router } from 'expo-router';
-import { getRetosOnce, Player } from '../services/retosService';
+import { getJugadoresOnce, Jugador } from '../services/jugadoresService';
 
 export default function InicioScreen() {
-  const [players, setPlayers] = useState<Player[]>([]);
+  const [jugadores, setJugadores] = useState<Jugador[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const cargarDatos = async () => {
+    const cargarJugadores = async () => {
       try {
-        const lista = await getRetosOnce();
-        setPlayers(lista);
+        const lista = await getJugadoresOnce();
+        setJugadores(lista);
       } catch (error) {
-        console.log('❌ Error cargando jugadores desde Firebase:', error);
+        console.log('Error cargando jugadores desde Firebase:', error);
       } finally {
         setLoading(false);
       }
     };
 
-    cargarDatos();
+    cargarJugadores();
   }, []);
 
   if (loading) {
@@ -38,10 +31,12 @@ export default function InicioScreen() {
     );
   }
 
-  if (!loading && players.length === 0) {
+  if (jugadores.length === 0) {
     return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <Text>No se han encontrado jugadores en Firebase.</Text>
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', padding: 16 }}>
+        <Text style={{ fontSize: 18, textAlign: 'center' }}>
+          No se han encontrado jugadores en Firebase.
+        </Text>
       </View>
     );
   }
@@ -53,7 +48,7 @@ export default function InicioScreen() {
       </Text>
 
       <FlatList
-        data={players}
+        data={jugadores}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
           <TouchableOpacity
